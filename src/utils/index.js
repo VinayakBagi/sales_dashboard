@@ -1,3 +1,5 @@
+import parse from "html-react-parser";
+
 export const calculateMetrics = (data) => {
   const totalRevenue = data.reduce((sum, item) => sum + item.revenue, 0);
   const totalOrders = data.length;
@@ -36,4 +38,14 @@ export const aggregateDataByMonth = (data) => {
     result[month].revenue += item.revenue;
   });
   return Object.values(result);
+};
+
+export const processReponseData = (data) => {
+  return parse(
+    (data || "")
+      .replaceAll("}\n", "")
+      .replaceAll("**:", "</b>")
+      .replaceAll("**", "<b>")
+      .replaceAll(/\s(\d+)\.\s/g, "<br/>")
+  );
 };

@@ -30,6 +30,12 @@ I chose **Chart.js** because it provides simple yet flexible charting options th
 - **Date Range Filter**: Filters data based on the selected date range.
 - **Interactive Elements**: Tooltips and drill-down capabilities for detailed insights.
 
+### Environment Variables
+
+Create a `.env` and add the following environment variables:
+
+REACT_APP_API_URL=your_api_url
+
 ## Conclusion
 
 This project demonstrates the ability to build a dynamic and informative sales dashboard using React and Chart.js, with a focus on data visualization, user interactions, and clean design.

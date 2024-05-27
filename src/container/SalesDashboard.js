@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import axios from "axios";
 import LineChart from "../components/LineChart";
 import BarChart from "../components/BarChart";
 import PieChart from "../components/PieChart";
 import KeyMetricCard from "../components/KeyMetricCard";
 import DateRangeFilter from "../components/DateRangeFilter";
-import { CHART_TYPE } from "../constants";
+import { CHART_TYPE, SERVER_URL } from "../constants";
 import { calculateMetrics, aggregateDataByMonth } from "../utils";
-import salesData from "../data/salesData.json";
+import Insights from "../components/Insights";
+import Forecast from "../components/Forecast";
+import Query from "../components/Query";
 
 const SalesDashboard = () => {
-  const [filteredData, setFilteredData] = useState(salesData);
+  const [filteredData, setFilteredData] = useState([]);
+  const [salesData, setSalesData] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]);
   const [drillDownData, setDrillDownData] = useState(null);
   const [drillDownTitle, setDrillDownTitle] = useState("");
@@ -20,6 +24,20 @@ const SalesDashboard = () => {
     setMonthlyData(aggregateDataByMonth(filteredData));
     handleDrillDownReset();
   }, [filteredData]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${SERVER_URL}api/sales`);
+        setSalesData(response.data);
+        setFilteredData(response.data);
+      } catch (error) {
+        console.error("Error fetching insights:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (drillDownRef.current) {
@@ -135,6 +153,15 @@ const SalesDashboard = () => {
           />
         </div>
         {renderDrillDown}
+      </section>
+      <section>
+        <Insights />
+      </section>
+      <section>
+        <Forecast />
+      </section>
+      <section>
+        <Query />
       </section>
     </div>
   );
