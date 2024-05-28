@@ -89,7 +89,9 @@ const SalesDashboard = () => {
   const renderDrillDown = drillDownData && (
     <div className="drill-down" ref={drillDownRef}>
       <h2>{drillDownTitle}</h2>
-      <button onClick={handleDrillDownReset}>Close</button>
+      <button style={{ marginBottom: "20px" }} onClick={handleDrillDownReset}>
+        Close
+      </button>
       {drillDownChartType === CHART_TYPE.BAR && (
         <BarChart
           data={drillDownData}

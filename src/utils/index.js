@@ -1,21 +1,26 @@
 import parse from "html-react-parser";
 
 export const calculateMetrics = (data) => {
-  const totalRevenue = data.reduce((sum, item) => sum + item.revenue, 0);
-  const totalOrders = data.length;
-  const newCustomers = data.reduce((sum, item) => sum + item.newCustomers, 0);
-  const avgOrderValue = totalOrders
-    ? (totalRevenue / totalOrders).toFixed(2)
-    : 0;
-  const topCategory = data.reduce((acc, item) => {
-    if (!acc[item.category]) {
-      acc[item.category] = 0;
+  let totalRevenue = 0;
+  let totalOrders = data.length;
+  let newCustomers = 0;
+  let categoryRevenue = {};
+
+  data.forEach((item) => {
+    totalRevenue += item.revenue;
+    newCustomers += item.newCustomers;
+
+    if (!categoryRevenue[item.category]) {
+      categoryRevenue[item.category] = 0;
     }
-    acc[item.category] += item.revenue;
-    return acc;
-  }, {});
-  const topCategoryName = Object.keys(topCategory).reduce(
-    (a, b) => (topCategory[a] > topCategory[b] ? a : b),
+    categoryRevenue[item.category] += item.revenue;
+  });
+
+  const avgOrderValue = totalOrders
+    ? +(totalRevenue / totalOrders).toFixed(2)
+    : 0;
+  const topCategoryName = Object.keys(categoryRevenue).reduce(
+    (a, b) => (categoryRevenue[a] > categoryRevenue[b] ? a : b),
     ""
   );
 
